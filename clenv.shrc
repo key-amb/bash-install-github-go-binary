@@ -1,0 +1,1 @@
+export IGGB_CONF_DIR=$CLENV_ROOT/environments/$CLENV_ENVIRONMENT/modules/install-github-go-binary
