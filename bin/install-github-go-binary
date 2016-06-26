@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+IGGB_VERSION=0.1.0
+
+help() {
+  pod2text $0
+  exit 1
+}
+
+version() {
+  echo $IGGB_VERSION
+  exit 0
+}
+
+case "${1:-}" in
+  "" | "-h" | "--help" )
+    help
+    ;;
+  "-v" | "--version" )
+    version
+    ;;
+  * )
+    ;;
+esac
+
+CONF_DIR=${IGGB_CONF_DIR:-config}
+BIN=$1
+if [[ -d $CONF_DIR && -r $CONF_DIR/$BIN.conf ]]; then
+  . $CONF_DIR/$BIN.conf
+fi
+
+VERSION=${VERSION:-$2}
+OWNER=${OWNER:-$BIN}
+REPO=${REPO:-$BIN}
+OS=${OS:-linux}
+ARCH=${ARCH:-amd64}
+EXT=${EXT:-tar.gz}
+BIN_PATH=${BIN_PATH:-$BIN}
+INSTALL_PATH=${INSTALL_PATH:-/usr/local/bin/}
+
+if which $BIN &>/dev/null; then
+  if $BIN --version 2>&1 | grep $VERSION &>/dev/null; then
+    echo "[OK] $BIN v${VERSION} already installed."
+    exit 0
+  fi
+fi
+
+FORMAT=${FORMAT:-'${BIN}-${OS}-${ARCH}-v${VERSION}.${EXT}'}
+archive="$(eval echo $FORMAT)"
+package=${archive%.${EXT}}
+
+cd tmp
+wget "https://github.com/$OWNER/$REPO/releases/download/v${VERSION}/${archive}"
+tar xvzf $archive
+cp $package/$BIN_PATH $INSTALL_PATH
+
+rm -rf ./${package}*
+
+exit
+
+: <<'__EOF__'
+
+=encoding utf8
+
+=head1 NAME
+
+B<install-github-go-binary> - Install Go binary program hosted on GitHub
+
+=head1 SYNOPSYS
+
+    # Install program
+    [OPTIONS] install-github-go-binary <program> <version>
+
+    # Help
+    install-github-go-binary [-h|--help]
+
+    # Version
+    install-github-go-binary -v|--version
+
+=head1 DESCRIPTION
+
+Installs binary programs from GitHub.
+
+Especially programs written in Golang.
+
+=head1 AUTHORS
+
+IKEDA Kiyoshi E<lt>yasutake.kiyoshi@gmail.comE<gt>
+
+=head1 LICENSE
+
+The MIT License (MIT)
+
+Copyright (c) 2016 IKEDA Kiyoshi
+
+=cut
+
+__EOF__
+
