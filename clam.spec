@@ -1,4 +1,4 @@
 name=install-gihub-go-binary
-version=0.2.0
+version=0.3.0
 executables=bin/*
 resources=clenv.shrc
