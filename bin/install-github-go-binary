@@ -37,6 +37,7 @@ REPO=${REPO:-$BIN}
 OS=${OS:-linux}
 ARCH=${ARCH:-amd64}
 EXT=${EXT:-tar.gz}
+RAW=${RAW:-}
 BIN_PATH=${BIN_PATH:-$BIN}
 INSTALL_PATH=${INSTALL_PATH:-/usr/local/bin/}
 
@@ -47,14 +48,23 @@ if which $BIN &>/dev/null; then
   fi
 fi
 
-FORMAT=${FORMAT:-'${BIN}-${OS}-${ARCH}-v${VERSION}.${EXT}'}
-archive="$(eval echo $FORMAT)"
-package=${archive%.${EXT}}
-
 cd tmp
-wget "https://github.com/$OWNER/$REPO/releases/download/v${VERSION}/${archive}"
-tar xvzf $archive
-cp $package/$BIN_PATH $INSTALL_PATH
+
+if [[ $RAW ]]; then
+  FORMAT=${FORMAT:-'${BIN}-${OS}-${ARCH}-v${VERSION}'}
+  package="$(eval echo $FORMAT)"
+  wget "https://github.com/$OWNER/$REPO/releases/download/v${VERSION}/${package}" -O $BIN
+  chmod +x $BIN
+  mv $BIN $INSTALL_PATH
+else
+  FORMAT=${FORMAT:-'${BIN}-${OS}-${ARCH}-v${VERSION}.${EXT}'}
+  archive="$(eval echo $FORMAT)"
+  package=${archive%.${EXT}}
+
+  wget "https://github.com/$OWNER/$REPO/releases/download/v${VERSION}/${archive}"
+  tar xvzf $archive
+  cp $package/$BIN_PATH $INSTALL_PATH
+fi
 
 rm -rf ./${package}*
 
