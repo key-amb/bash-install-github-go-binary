@@ -59,8 +59,8 @@ fi
 VERSION=${VERSION:-$2}
 OWNER=${OWNER:-$BIN}
 REPO=${REPO:-$BIN}
-OS=${OS:-linux}
-ARCH=${ARCH:-amd64}
+OS=${OS:-}
+ARCH=${ARCH:-}
 EXT=${EXT:-tar.gz}
 RAW=${RAW:-}
 BIN_PATH=${BIN_PATH:-$BIN}
@@ -71,6 +71,34 @@ if which $BIN &>/dev/null; then
     echo "[OK] $BIN v${VERSION} already installed."
     exit 0
   fi
+fi
+
+if [[ -z $OS ]]; then
+  case "$(uname)" in
+    "Darwin" )
+      OS="darwin"
+      ;;
+    *Linux )
+      OS="linux"
+      ;;
+    * )
+      echo "[ERROR] Not supported platform! $(uname)" >&2
+      exit 1
+  esac
+fi
+
+if [[ -z $ARCH ]]; then
+  case "$(uname -m)" in
+    "x86_64" )
+      ARCH="amd64"
+      ;;
+    i[3-6]86 )
+      ARCH=386
+      ;;
+    * )
+      echo "[ERROR] Unknow hardware type! $(uname -m)" >&2
+      exit 1
+  esac
 fi
 
 cd tmp
