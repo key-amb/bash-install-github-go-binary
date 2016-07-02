@@ -14,6 +14,31 @@ version() {
   exit 0
 }
 
+extract_archive() {
+  archive=$1
+  case "$archive" in
+    *\.tgz | *\.tar.gz )
+      tar xvzf $archive
+      ;;
+    *\.gz )
+      gzip $archive
+      ;;
+    *\.tbz2 | *\.tar.bz2 )
+      tar xvjf $archive
+      ;;
+    *\.bz2 )
+      bunzip2 $archive
+      ;;
+    *\.zip )
+      unzip $archive
+      ;;
+    * )
+      echo "[ERROR] Unknown archive format! $archive" >&2
+      exit 1
+      ;;
+  esac
+}
+
 case "${1:-}" in
   "" | "-h" | "--help" )
     help
@@ -62,7 +87,7 @@ else
   package=${archive%.${EXT}}
 
   wget "https://github.com/$OWNER/$REPO/releases/download/v${VERSION}/${archive}"
-  tar xvzf $archive
+  extract_archive $archive
   cp $package/$BIN_PATH $INSTALL_PATH
 fi
 
