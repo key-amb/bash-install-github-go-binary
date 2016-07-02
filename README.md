@@ -8,6 +8,7 @@
     [OPTIONS] install-github-go-binary <program> <version>
     install-github-go-binary hub 2.2.3
     install-github-go-binary peco 0.3.6
+    install-github-go-binary lltsv 0.4.1
 
     # Help
     install-github-go-binary [-h|--help]
