@@ -1,3 +1,9 @@
+## 0.4.0
+
+Feature:
+
+- Detect OS and hardware type by `uname` command if not given as shell variables
+
 ## 0.3.0
 
 Feature:
