@@ -1,3 +1,9 @@
+## 0.4.1
+
+Minor Update:
+
+- Add conf for Songmu/ghg
+
 ## 0.4.0
 
 Feature:
