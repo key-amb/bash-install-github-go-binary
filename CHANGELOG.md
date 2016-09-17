@@ -1,3 +1,9 @@
+## 0.4.2
+
+Change:
+
+- Load `lib/install-github-go-binary.shrc` always to set $IGGB_CONF_DIR var
+
 ## 0.4.1
 
 Minor Update:
