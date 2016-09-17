@@ -4,6 +4,9 @@ set -euo pipefail
 
 IGGB_VERSION=0.4.1
 
+lib_dir=$(cd $(dirname $0)/../lib && pwd)
+source "${lib_dir}/install-github-go-binary.shrc"
+
 help() {
   pod2text $0
   exit 1

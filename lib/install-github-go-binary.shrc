@@ -1,1 +1,8 @@
-export IGGB_CONF_DIR=$CLENV_ROOT/environments/$CLENV_ENVIRONMENT/modules/install-github-go-binary
+# bash
+if [[ "${CLENV_ROOT:-}" ]]; then
+  IGGB_CONF_DIR=$CLENV_ROOT/environments/$CLENV_ENVIRONMENT/modules/install-github-go-binary/config
+fi
+if [[ ! -d "${IGGB_CONF_DIR:-}" ]]; then
+  IGGB_CONF_DIR=$(cd $(dirname ${BASH_SOURCE})/../config && pwd)
+fi
+export IGGB_CONF_DIR
